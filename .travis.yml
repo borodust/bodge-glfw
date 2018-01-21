@@ -1,0 +1,68 @@
+language: c
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - gcc-multilib
+    - xorg-dev
+
+env:
+  global:
+    - NAME: glfw
+    - secure: Yug8ZSWsbZKP6p5AbVZ3TG2XiukvZpZPc6K3er+b+576lYhJqgs9EI6wCMsfZtXV8A/Ez+49iW0dEBABOHCNe5mvX6Kr4vACoqywVmJ7IVvpt6hpqNjbQ/nMEdLaf/izxrnL8YKqU8qYcF+aJc4T3EOaz5nKgt2pfZuXgpwSbOhRhQbPxjJ45gyqvYJbccvk72h1WrFnU926EfQ7THb/7VHJLidH+eH5GE+mLj9NY1tZYqNI0LTApVkTBxkfvz8gAC8ZR30W/eitah/cEzBROuvmspvU8CpOib2sfQdm3XDJ0LMo7kwlfUbNshM9l2gNzruwWoDOEtGspnb4Rixll3ZzLFRrlTmlV2a2NfKLCcyeakvRiYzrmcZu8lr3Ve0pZ3WYP2c6a1CnU6FL6kVxEJ+D+EXJLmfIZbZDkxbV39ui+PgaRdQ/CUijVfyn/2XZf8FwJpdJhYSJyznPeAg+7C1U2ea+f2smoAHv/Y7TtetqQip/O8ycKnCfUT6TRZ5JRslY75s8qZE3Q/6XQWWfO3rigrGSKL5tuN4uoB3OM5JeN9m7p1ltklaXh6Mfiph8/WnLtlAFGKh2B9RuOPU3ffcIYudHIy7dVPuGkVwdvbQuroDQZEnrxO5ptefT8qlaKJzs/aczlgm9F6qKu1p/BS5XAJjvWj9g1oulWAwctRU=
+
+matrix:
+  include:
+  - os: linux
+    env:
+      - ARCH=i686
+      - CFLAGS=-m32
+      - EXTENSION=so
+  - os: linux
+    env:
+      - ARCH=x86_64
+      - CFLAGS=-m64
+      - EXTENSION=so
+  - os: osx
+    env:
+      - ARCH=i686
+      - CFLAGS=-m32
+      - EXTENSION=dylib
+  - os: osx
+    env:
+      - ARCH=x86_64
+      - CFLAGS=-m64
+      - EXTENSION=dylib
+
+branches:
+  only:
+  - "/^v\\d+(\\.\\d+)+$/"
+
+
+script:
+  - >
+    cd lib/ && cmake -G "Unix Makefiles" \
+        -DCMAKE_C_FLAGS=$(CFLAGS) \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+        -DBUILD_SHARED_LIBS=ON \
+        -DLIBRARY_OUTPUT_PATH=$TRAVIS_BUILD_DIR/lib \
+        -DGLFW_BUILD_TESTS=OFF \
+        -DGLFW_BUILD_DOCS=OFF \
+        -DGLFW_INSTALL=OFF \
+        -DGLFW_BUILD_EXAMPLES=OFF . && \
+        make
+
+before_deploy:
+  - export TARGET_FILE=$TRAVIS_BUILD_DIR/lib$NAME.$EXTENSION.bodged-$ARCH-$TRAVIS_OS_NAME-$TRAVIS_BRANCH
+  - mv $TRAVIS_BUILD_DIR/lib/lib$NAME.$EXTENSION.bodged $TARGET_FILE
+
+deploy:
+  provider: releases
+  api-key: $GITHUB_TOKEN
+  file: $TARGET_FILE
+  skip_cleanup: true
+  overwrite: true
+  on:
+    tags: true
