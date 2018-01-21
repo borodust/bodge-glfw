@@ -19,21 +19,25 @@ matrix:
       - ARCH=i686
       - CFLAGS=-m32
       - EXTENSION=so
+      - OUTPUT_FILE=lib$NAME.$EXTENSION.bodged
   - os: linux
     env:
       - ARCH=x86_64
       - CFLAGS=-m64
       - EXTENSION=so
+      - OUTPUT_FILE=lib$NAME.$EXTENSION.bodged
   - os: osx
     env:
       - ARCH=i686
       - CFLAGS=-m32
       - EXTENSION=dylib
+      - OUTPUT_FILE=lib$NAME.bodged.$EXTENSION
   - os: osx
     env:
       - ARCH=x86_64
       - CFLAGS=-m64
       - EXTENSION=dylib
+      - OUTPUT_FILE=lib$NAME.bodged.$EXTENSION
 
 branches:
   only:
@@ -56,7 +60,7 @@ script:
 
 before_deploy:
   - export TARGET_FILE=$TRAVIS_BUILD_DIR/lib$NAME.$EXTENSION.bodged-$ARCH-$TRAVIS_OS_NAME-$TRAVIS_BRANCH
-  - mv $TRAVIS_BUILD_DIR/lib/lib$NAME.$EXTENSION.bodged $TARGET_FILE
+  - mv $TRAVIS_BUILD_DIR/lib/$OUTPUT_FILE $TARGET_FILE
 
 deploy:
   provider: releases

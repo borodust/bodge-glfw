@@ -9,3 +9,9 @@ set_target_properties(glfw PROPERTIES
   VERSION bodged
   SOVERSION bodged
   POSITION_INDEPENDENT_CODE ON)
+
+if (WIN32)
+   set_target_properties(glfw PROPERTIES
+     PREFIX lib
+     SUFFIX .dll.bodged)
+endif()
