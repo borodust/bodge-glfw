@@ -2,7 +2,7 @@
 
 # bodge glfw wrapper
 
-Thin wrapper over [`GLFW`](http://chipmunk-physics.net/) OS abstraction and GL/Vulkan context
+Thin wrapper over [`GLFW`](http://www.glfw.org/) OS abstraction and GL/Vulkan context
 handling library.
 
 # Requirements
@@ -13,4 +13,21 @@ handling library.
 # Loading
 ```lisp
 (ql:quickload '(glfw-blob bodge-glfw))
+```
+
+# Usage
+
+### Interface
+All wrapped functions can be found in `%glfw` package. On the other hand, `glfw` package
+contains minimally lispified wrappers and utility functions.
+
+
+# Example
+Lispified GLFW [example](http://www.glfw.org/documentation.html#example-code) from the
+documentation can be found in [`example.lisp`](example.lisp)
+
+To run it, evaluate in your REPL:
+```lisp
+(ql:quickload :bodge-glfw/example)
+(glfw.example:run)
 ```

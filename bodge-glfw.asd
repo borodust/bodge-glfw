@@ -12,3 +12,13 @@
                (:file "claw")
                (:file "glfw")
                (:module spec)))
+
+
+(asdf:defsystem bodge-glfw/example
+  :description "bodge-glfw example"
+  :version "1.0.0"
+  :author "Pavel Korolev"
+  :mailto "dev@borodust.org"
+  :license "MIT"
+  :depends-on (glfw-blob bodge-glfw claw cl-opengl)
+  :components ((:file "example")))
