@@ -1,4 +1,4 @@
-(in-package :glfw)
+(cl:in-package :glfw)
 
 
 (defmacro define-window-close-callback (name (window) &body body)
