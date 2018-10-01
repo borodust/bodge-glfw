@@ -11,6 +11,7 @@
                (:static-file "bodge_glfw.h")
                (:file "claw")
                (:file "glfw")
+               (:module glfw-includes :pathname "lib/glfw/include/")
                (:module spec)))
 
 

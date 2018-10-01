@@ -1,40 +1,36 @@
 language: c
-sudo: false
-
-addons:
-  apt:
-    packages:
-    - gcc-multilib
-    - xorg-dev
+sudo: true
+dist: xenial
 
 env:
   global:
     - NAME: glfw
+    - ASDF_SYSTEM: bodge-glfw
     - secure: Yug8ZSWsbZKP6p5AbVZ3TG2XiukvZpZPc6K3er+b+576lYhJqgs9EI6wCMsfZtXV8A/Ez+49iW0dEBABOHCNe5mvX6Kr4vACoqywVmJ7IVvpt6hpqNjbQ/nMEdLaf/izxrnL8YKqU8qYcF+aJc4T3EOaz5nKgt2pfZuXgpwSbOhRhQbPxjJ45gyqvYJbccvk72h1WrFnU926EfQ7THb/7VHJLidH+eH5GE+mLj9NY1tZYqNI0LTApVkTBxkfvz8gAC8ZR30W/eitah/cEzBROuvmspvU8CpOib2sfQdm3XDJ0LMo7kwlfUbNshM9l2gNzruwWoDOEtGspnb4Rixll3ZzLFRrlTmlV2a2NfKLCcyeakvRiYzrmcZu8lr3Ve0pZ3WYP2c6a1CnU6FL6kVxEJ+D+EXJLmfIZbZDkxbV39ui+PgaRdQ/CUijVfyn/2XZf8FwJpdJhYSJyznPeAg+7C1U2ea+f2smoAHv/Y7TtetqQip/O8ycKnCfUT6TRZ5JRslY75s8qZE3Q/6XQWWfO3rigrGSKL5tuN4uoB3OM5JeN9m7p1ltklaXh6Mfiph8/WnLtlAFGKh2B9RuOPU3ffcIYudHIy7dVPuGkVwdvbQuroDQZEnrxO5ptefT8qlaKJzs/aczlgm9F6qKu1p/BS5XAJjvWj9g1oulWAwctRU=
 
 matrix:
   include:
   - os: linux
     env:
-      - ARCH=i686
+      - TARGET_ARCH=i686
       - CFLAGS=-m32
       - EXTENSION=so
       - OUTPUT_FILE=lib$NAME.$EXTENSION.bodged
   - os: linux
     env:
-      - ARCH=x86_64
+      - TARGET_ARCH=x86_64
       - CFLAGS=-m64
       - EXTENSION=so
       - OUTPUT_FILE=lib$NAME.$EXTENSION.bodged
   - os: osx
     env:
-      - ARCH=i686
+      - TARGET_ARCH=i686
       - CFLAGS=-m32
       - EXTENSION=dylib
       - OUTPUT_FILE=lib$NAME.bodged.$EXTENSION
   - os: osx
     env:
-      - ARCH=x86_64
+      - TARGET_ARCH=x86_64
       - CFLAGS=-m64
       - EXTENSION=dylib
       - OUTPUT_FILE=lib$NAME.bodged.$EXTENSION
@@ -44,9 +40,23 @@ branches:
   - "/^v\\d+(\\.\\d+)+$/"
 
 
+before_install:
+  - >
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo apt-get update -q
+      sudo -E apt-get -yq --no-install-suggests --no-install-recommends install patchelf gcc-multilib xorg-dev
+    fi
+
+install:
+  - git submodule update --init --recursive
+  - curl -L http://bodge.borodust.org/files/install.sh | sh
+  - curl -L http://bodge.borodust.org/files/c2ffi-$TRAVIS_OS_NAME-$TARGET_ARCH.zip -o /tmp/c2ffi.zip
+  - cd ~/bin/ && unzip /tmp/c2ffi.zip
+  - ln -s $TRAVIS_BUILD_DIR/ ~/quicklisp/local-projects/$ASDF_SYSTEM
+
 script:
   - >
-    cd lib/ && cmake -G "Unix Makefiles" \
+    cd $TRAVIS_BUILD_DIR/lib/ && cmake -G "Unix Makefiles" \
         -DCMAKE_C_FLAGS=$(CFLAGS) \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
@@ -57,15 +67,25 @@ script:
         -DGLFW_INSTALL=OFF \
         -DGLFW_BUILD_EXAMPLES=OFF . && \
         make
+  - rm -rf $TRAVIS_BUILD_DIR/spec/*
+  - lisp "$TRAVIS_BUILD_DIR/regen-spec.lisp" $TARGET_ARCH "$ASDF_SYSTEM"
+  - cd $TRAVIS_BUILD_DIR/ && zip -r spec.zip spec/
 
 before_deploy:
-  - export TARGET_FILE=$TRAVIS_BUILD_DIR/lib$NAME.$EXTENSION.bodged-$ARCH-$TRAVIS_OS_NAME-$TRAVIS_BRANCH
+  - export TARGET_FILE=$TRAVIS_BUILD_DIR/lib$NAME.$EXTENSION.bodged-$TARGET_ARCH-$TRAVIS_OS_NAME-$TRAVIS_BRANCH
   - mv $TRAVIS_BUILD_DIR/lib/$OUTPUT_FILE $TARGET_FILE
+  - >
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      patchelf --set-rpath '@ORIGIN/' "$TARGET_FILE";
+      patchelf --set-soname "lib$NAME.$EXTENSION.bodged" "$TARGET_FILE";
+    fi
+  - export SPEC_ARCHIVE=$TARGET_FILE-spec.zip
+  - mv $TRAVIS_BUILD_DIR/spec.zip $SPEC_ARCHIVE
 
 deploy:
   provider: releases
   api-key: $GITHUB_TOKEN
-  file: $TARGET_FILE
+  file: [$TARGET_FILE, $SPEC_ARCHIVE]
   skip_cleanup: true
   overwrite: true
   on:
