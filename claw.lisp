@@ -1,6 +1,6 @@
 (claw:c-include "bodge_glfw.h" bodge-glfw
   :in-package :%glfw
-  :sysincludes (:glfw-includes)
+  :includes (:glfw-includes)
   :include-definitions ("(glfw|GLFW)\\w*")
   :exclude-definitions ("^(GL|gl)(?!(FW|fw))\\w*"
                         "^PFN\\w*"
