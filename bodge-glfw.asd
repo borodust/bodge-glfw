@@ -7,7 +7,6 @@
   :depends-on (alexandria cffi claw)
   :serial t
   :components ((:file "packages")
-               (:file "libglfw")
                (:static-file "bodge_glfw.h")
                (:file "claw")
                (:file "glfw")

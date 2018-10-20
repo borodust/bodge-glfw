@@ -10,7 +10,7 @@
   (when (= (%glfw:init) 0)
     (error "Failed to init GLFW"))
   ;; Create a windowed mode window and its OpenGL context
-  (claw:c-with ((window %glfw:window :from (%glfw:create-window 640 480 "Hello World" nil nil)))
+  (let ((window (%glfw:create-window 640 480 "Hello World" nil nil)))
     (when (claw:null-pointer-p window)
       (%glfw:terminate)
       (error "Failed to create GLFW window"))
