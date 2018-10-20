@@ -30,9 +30,7 @@ install:
   - >
     sh -c "
     pacman --needed --noconfirm -S zip unzip base-devel %PACKAGES% &&
-    curl -L http://bodge.borodust.org/files/install.sh | sh &&
-    curl -L http://bodge.borodust.org/files/c2ffi-windows-x86_64.zip -o /tmp/c2ffi.zip &&
-    cd ~/bin/ && unzip /tmp/c2ffi.zip
+    curl -L http://bodge.borodust.org/files/install.sh | sh
     "
 
 build_script:
@@ -52,7 +50,7 @@ build_script:
     export PATH=$HOME/bin/:$PATH
     && rm -rf %APPVEYOR_BUILD_DIR%/spec/*
     && ln -s %APPVEYOR_BUILD_DIR%/ ~/quicklisp/local-projects/
-    && $HOME/bin/lisp %APPVEYOR_BUILD_DIR%/regen-spec.lisp %TARGET_ARCH% '%ASDF_SYSTEM%'
+    && $HOME/bin/lisp %APPVEYOR_BUILD_DIR%/regen-spec.lisp '%ASDF_SYSTEM%' t %TARGET_ARCH%
     && cd ~/quicklisp/local-projects/%ASDF_SYSTEM%/ && zip -r spec.zip spec/
     && mv ~/quicklisp/local-projects/%ASDF_SYSTEM%/spec.zip %APPVEYOR_BUILD_DIR%/
     "

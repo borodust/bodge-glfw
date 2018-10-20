@@ -50,8 +50,6 @@ before_install:
 install:
   - git submodule update --init --recursive
   - curl -L http://bodge.borodust.org/files/install.sh | sh
-  - curl -L http://bodge.borodust.org/files/c2ffi-$TRAVIS_OS_NAME-$TARGET_ARCH.zip -o /tmp/c2ffi.zip
-  - cd ~/bin/ && unzip /tmp/c2ffi.zip
   - ln -s $TRAVIS_BUILD_DIR/ ~/quicklisp/local-projects/$ASDF_SYSTEM
 
 script:
@@ -68,7 +66,7 @@ script:
         -DGLFW_BUILD_EXAMPLES=OFF . && \
         make
   - rm -rf $TRAVIS_BUILD_DIR/spec/*
-  - lisp "$TRAVIS_BUILD_DIR/regen-spec.lisp" $TARGET_ARCH "$ASDF_SYSTEM"
+  - lisp "$TRAVIS_BUILD_DIR/regen-spec.lisp" "$ASDF_SYSTEM" t $TARGET_ARCH
   - cd $TRAVIS_BUILD_DIR/ && zip -r spec.zip spec/
 
 before_deploy:

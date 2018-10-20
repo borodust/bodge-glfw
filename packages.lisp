@@ -1,7 +1,6 @@
 (cl:defpackage :glfw
   (:use :cl :claw :alexandria)
-  (:export libglfw
-           define-key-callback
+  (:export define-key-callback
            define-window-close-callback
            define-mouse-button-callback
            define-cursor-pos-callback
