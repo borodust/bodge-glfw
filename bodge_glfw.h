@@ -1,6 +1,7 @@
 #ifndef _BODGE_GLFW_H_
 #define _BODGE_GLFW_H_
 
+#define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
 #if defined(_WIN32)
