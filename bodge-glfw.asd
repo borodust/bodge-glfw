@@ -11,6 +11,7 @@
                (:file "claw")
                (:file "glfw")
                (:module glfw-includes :pathname "lib/glfw/include/")
+               (:module glfw-deps :pathname "lib/glfw/deps/")
                (:module spec)))
 
 
