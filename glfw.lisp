@@ -44,6 +44,13 @@
      ,@body))
 
 
+(defmacro define-window-size-callback (name (window w h) &body body)
+  `(claw:defcallback ,name :void ((,window (:pointer %glfw:window))
+                                  (,w :int)
+                                  (,h :int))
+     ,@body))
+
+
 (defmacro define-char-callback (name (window codepoint) &body body)
   `(claw:defcallback ,name :void ((,window (:pointer %glfw:window))
                                   (,codepoint :unsigned-int))

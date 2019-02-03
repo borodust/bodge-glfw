@@ -6,6 +6,7 @@
            define-cursor-pos-callback
            define-scroll-callback
            define-framebuffer-size-callback
+           define-window-size-callback
            define-char-callback
            with-window-hints
            with-init))
