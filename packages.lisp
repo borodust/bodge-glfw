@@ -8,5 +8,6 @@
            define-framebuffer-size-callback
            define-window-size-callback
            define-char-callback
+           define-joystick-callback
            with-window-hints
            with-init))

@@ -57,6 +57,11 @@
      ,@body))
 
 
+(defmacro define-joystick-callback (name (joystick-id event-id) &body body)
+  `(claw:defcallback ,name :void ((,joystick-id :int) (,event-id :int))
+     ,@body))
+
+
 (defmacro with-window-hints ((&rest hints) &body body)
   `(unwind-protect
         (progn
