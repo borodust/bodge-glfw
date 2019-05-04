@@ -61,6 +61,11 @@
   `(claw:defcallback ,name :void ((,joystick-id :int) (,event-id :int))
      ,@body))
 
+(defmacro define-drop-callback (name (window count paths) &body body)
+  `(claw:defcallback ,name :void ((,window (:pointer %glfw:window))
+                                  (,count :int)
+                                  (,paths (:pointer (:pointer :char))))
+     ,@body))
 
 (defmacro with-window-hints ((&rest hints) &body body)
   `(unwind-protect
