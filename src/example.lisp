@@ -10,8 +10,10 @@
   (when (= (%glfw:init) 0)
     (error "Failed to init GLFW"))
   ;; Create a windowed mode window and its OpenGL context
-  (let ((window (%glfw:create-window 640 480 "Hello World" nil nil)))
-    (when (claw:null-pointer-p window)
+  (let ((window (cffi:with-foreign-string (text "Hello World")
+                  (%glfw:create-window 640 480 text
+                                       (cffi:null-pointer) (cffi:null-pointer)))))
+    (when (cffi:null-pointer-p window)
       (%glfw:terminate)
       (error "Failed to create GLFW window"))
     ;; Make the window's context current

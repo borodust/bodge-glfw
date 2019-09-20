@@ -54,24 +54,24 @@ install:
 
 script:
   - >
-    cd $TRAVIS_BUILD_DIR/lib/ && cmake -G "Unix Makefiles" \
+    cd $TRAVIS_BUILD_DIR/src/lib/ && cmake -G "Unix Makefiles" \
         -DCMAKE_C_FLAGS=$(CFLAGS) \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
         -DBUILD_SHARED_LIBS=ON \
-        -DLIBRARY_OUTPUT_PATH=$TRAVIS_BUILD_DIR/lib \
+        -DLIBRARY_OUTPUT_PATH=$TRAVIS_BUILD_DIR/src/lib \
         -DGLFW_BUILD_TESTS=OFF \
         -DGLFW_BUILD_DOCS=OFF \
         -DGLFW_INSTALL=OFF \
         -DGLFW_BUILD_EXAMPLES=OFF . && \
         make
-  - rm -rf $TRAVIS_BUILD_DIR/spec/*
-  - lisp "$TRAVIS_BUILD_DIR/regen-spec.lisp" "$ASDF_SYSTEM" t $TARGET_ARCH
-  - cd $TRAVIS_BUILD_DIR/ && zip -r spec.zip spec/
+  - rm -rf $TRAVIS_BUILD_DIR/src/spec/*
+  - lisp "$TRAVIS_BUILD_DIR/util/regen-spec.lisp" "$ASDF_SYSTEM" t $TARGET_ARCH
+  - cd $TRAVIS_BUILD_DIR/ && zip -r spec.zip src/spec/
 
 before_deploy:
   - export TARGET_FILE=$TRAVIS_BUILD_DIR/lib$NAME.$EXTENSION.bodged-$TARGET_ARCH-$TRAVIS_OS_NAME-$TRAVIS_BRANCH
-  - mv $TRAVIS_BUILD_DIR/lib/$OUTPUT_FILE $TARGET_FILE
+  - mv $TRAVIS_BUILD_DIR/src/lib/$OUTPUT_FILE $TARGET_FILE
   - >
     if [ "$TRAVIS_OS_NAME" = "linux" ]; then
       patchelf --set-rpath '@ORIGIN/' "$TARGET_FILE";

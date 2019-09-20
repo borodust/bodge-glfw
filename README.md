@@ -24,7 +24,7 @@ contains minimally lispified wrappers and utility functions.
 
 # Example
 Lispified GLFW [example](http://www.glfw.org/documentation.html#example-code) from the
-documentation can be found in [`example.lisp`](example.lisp)
+documentation can be found in [`example.lisp`](src/example.lisp)
 
 To run it, evaluate in your REPL:
 ```lisp
