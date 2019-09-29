@@ -6,7 +6,6 @@
 {"tag":":const","name":"GLFW_ACCUM_RED_BITS","location":"/home/borodust/devel/repo/bodge-projects/bodge-glfw/src/lib/glfw/include/GLFW/glfw3.h:869:9","value":135175},
 {"tag":":const","name":"GLFW_ALPHA_BITS","location":"/home/borodust/devel/repo/bodge-projects/bodge-glfw/src/lib/glfw/include/GLFW/glfw3.h:854:9","value":135172},
 {"tag":":const","name":"GLFW_ANY_RELEASE_BEHAVIOR","location":"/home/borodust/devel/repo/bodge-projects/bodge-glfw/src/lib/glfw/include/GLFW/glfw3.h:1030:9","value":0},
-{"tag":":const","name":"GLFW_APIENTRY_DEFINED","location":"/home/borodust/devel/repo/bodge-projects/bodge-glfw/src/lib/glfw/include/GLFW/glfw3.h:127:10","value":null},
 {"tag":":const","name":"GLFW_API_UNAVAILABLE","location":"/home/borodust/devel/repo/bodge-projects/bodge-glfw/src/lib/glfw/include/GLFW/glfw3.h:704:9","value":65542},
 {"tag":":const","name":"GLFW_ARROW_CURSOR","location":"/home/borodust/devel/repo/bodge-projects/bodge-glfw/src/lib/glfw/include/GLFW/glfw3.h:1050:9","value":221185},
 {"tag":":const","name":"GLFW_AUTO_ICONIFY","location":"/home/borodust/devel/repo/bodge-projects/bodge-glfw/src/lib/glfw/include/GLFW/glfw3.h:798:9","value":131078},

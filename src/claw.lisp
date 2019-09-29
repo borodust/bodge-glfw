@@ -8,6 +8,9 @@
 (claw:defwrapper (bodge-glfw
                   (:includes :glfw-includes :glfw-deps)
                   (:include-definitions "^(glfw|GLFW)\\w*")
+                  (:exclude-definitions "GLFW_WINGDIAPI_DEFINED"
+                                        "GLFW_APIENTRY_DEFINED"
+                                        "GLFW_CALLBACK_DEFINED")
                   (:spec-path "spec/"))
   :in-package :%glfw
   :trim-enum-prefix t
