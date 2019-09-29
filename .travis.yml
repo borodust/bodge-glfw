@@ -65,9 +65,6 @@ script:
         -DGLFW_INSTALL=OFF \
         -DGLFW_BUILD_EXAMPLES=OFF . && \
         make
-  - rm -rf $TRAVIS_BUILD_DIR/src/spec/*
-  - lisp "$TRAVIS_BUILD_DIR/util/regen-spec.lisp" "$ASDF_SYSTEM" t $TARGET_ARCH
-  - cd $TRAVIS_BUILD_DIR/ && zip -r spec.zip src/spec/
 
 before_deploy:
   - export TARGET_FILE=$TRAVIS_BUILD_DIR/lib$NAME.$EXTENSION.bodged-$TARGET_ARCH-$TRAVIS_OS_NAME-$TRAVIS_BRANCH
@@ -77,13 +74,11 @@ before_deploy:
       patchelf --set-rpath '@ORIGIN/' "$TARGET_FILE";
       patchelf --set-soname "lib$NAME.$EXTENSION.bodged" "$TARGET_FILE";
     fi
-  - export SPEC_ARCHIVE=$TARGET_FILE-spec.zip
-  - mv $TRAVIS_BUILD_DIR/spec.zip $SPEC_ARCHIVE
 
 deploy:
   provider: releases
   api-key: $GITHUB_TOKEN
-  file: [$TARGET_FILE, $SPEC_ARCHIVE]
+  file: [$TARGET_FILE]
   skip_cleanup: true
   overwrite: true
   on:
