@@ -600,15 +600,16 @@
 (cffi:defcstruct (%glfw::image :size 16)
                  (%glfw::width :int :offset 0)
                  (%glfw::height :int :offset 4)
-                 (%glfw::pixels (:pointer :unsigned-char) :offset 8))
+                 (%glfw::pixels
+                  (claw-utils:claw-pointer :unsigned-char) :offset 8))
 
 (cffi:defctype %glfw::image (:struct %glfw::image))
 
 (declaim (inline %glfw::create-cursor))
 
 (cffi:defcfun ("glfwCreateCursor" %glfw::create-cursor)
-              (:pointer %glfw::cursor)
-              (%glfw::image (:pointer %glfw::image))
+              (claw-utils:claw-pointer %glfw::cursor)
+              (%glfw::image (claw-utils:claw-pointer %glfw::image))
               (%glfw::xhot :int)
               (%glfw::yhot :int))
 
@@ -616,7 +617,7 @@
 
 (cffi:defcfun ("glfwCreateStandardCursor"
                %glfw::create-standard-cursor)
-              (:pointer %glfw::cursor)
+              (claw-utils:claw-pointer %glfw::cursor)
               (%glfw::shape :int))
 
 (cffi:defcstruct (%glfw::monitor :size 0))
@@ -630,12 +631,13 @@
 (declaim (inline %glfw::create-window))
 
 (cffi:defcfun ("glfwCreateWindow" %glfw::create-window)
-              (:pointer %glfw::window)
+              (claw-utils:claw-pointer %glfw::window)
               (%glfw::width :int)
               (%glfw::height :int)
               (%glfw::title claw-utils:claw-string)
-              (%glfw::monitor (:pointer %glfw::monitor))
-              (%glfw::share (:pointer %glfw::window)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::share (claw-utils:claw-pointer %glfw::window)))
 
 (cffi:defcenum (%glfw.ext::vk-result :int)
                "/usr/include/vulkan/vulkan_core.h:139:14"
@@ -693,23 +695,27 @@
 (cffi:defcstruct (%glfw.ext::vk-instance-t :size 0))
 
 (cffi:defctype %glfw.ext::vk-instance
-               (:pointer (:struct %glfw.ext::vk-instance-t)))
+               (claw-utils:claw-pointer
+                (:struct %glfw.ext::vk-instance-t)))
 
-(cffi:defctype %glfw.ext::pfn-vk-allocation-function (:pointer :void))
+(cffi:defctype %glfw.ext::pfn-vk-allocation-function
+               (claw-utils:claw-pointer :void))
 
 (cffi:defctype %glfw.ext::pfn-vk-reallocation-function
-               (:pointer :void))
+               (claw-utils:claw-pointer :void))
 
-(cffi:defctype %glfw.ext::pfn-vk-free-function (:pointer :void))
+(cffi:defctype %glfw.ext::pfn-vk-free-function
+               (claw-utils:claw-pointer :void))
 
 (cffi:defctype %glfw.ext::pfn-vk-internal-allocation-notification
-               (:pointer :void))
+               (claw-utils:claw-pointer :void))
 
 (cffi:defctype %glfw.ext::pfn-vk-internal-free-notification
-               (:pointer :void))
+               (claw-utils:claw-pointer :void))
 
 (cffi:defcstruct (%glfw.ext::vk-allocation-callbacks :size 48)
-                 (%glfw::p-user-data (:pointer :void) :offset 0)
+                 (%glfw::p-user-data (claw-utils:claw-pointer :void)
+                  :offset 0)
                  (%glfw::pfn-allocation
                   %glfw.ext::pfn-vk-allocation-function :offset 8)
                  (%glfw::pfn-reallocation
@@ -729,7 +735,8 @@
 (cffi:defcstruct (%glfw.ext::vk-surface-khr-t :size 0))
 
 (cffi:defctype %glfw.ext::vk-surface-khr
-               (:pointer (:struct %glfw.ext::vk-surface-khr-t)))
+               (claw-utils:claw-pointer
+                (:struct %glfw.ext::vk-surface-khr-t)))
 
 (declaim (inline %glfw::create-window-surface))
 
@@ -737,10 +744,12 @@
                %glfw::create-window-surface)
               %glfw.ext::vk-result
               (%glfw::instance %glfw.ext::vk-instance)
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::allocator
-               (:pointer %glfw.ext::vk-allocation-callbacks))
-              (%glfw::surface (:pointer %glfw.ext::vk-surface-khr)))
+               (claw-utils:claw-pointer
+                %glfw.ext::vk-allocation-callbacks))
+              (%glfw::surface
+               (claw-utils:claw-pointer %glfw.ext::vk-surface-khr)))
 
 (declaim (inline %glfw::default-window-hints))
 
@@ -751,13 +760,13 @@
 
 (cffi:defcfun ("glfwDestroyCursor" %glfw::destroy-cursor)
               :void
-              (%glfw::cursor (:pointer %glfw::cursor)))
+              (%glfw::cursor (claw-utils:claw-pointer %glfw::cursor)))
 
 (declaim (inline %glfw::destroy-window))
 
 (cffi:defcfun ("glfwDestroyWindow" %glfw::destroy-window)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::extension-supported))
 
@@ -769,40 +778,41 @@
 
 (cffi:defcfun ("glfwFocusWindow" %glfw::focus-window)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::get-clipboard-string))
 
 (cffi:defcfun ("glfwGetClipboardString" %glfw::get-clipboard-string)
               claw-utils:claw-string
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::get-current-context))
 
 (cffi:defcfun ("glfwGetCurrentContext" %glfw::get-current-context)
-              (:pointer %glfw::window))
+              (claw-utils:claw-pointer %glfw::window))
 
 (declaim (inline %glfw::get-cursor-pos))
 
 (cffi:defcfun ("glfwGetCursorPos" %glfw::get-cursor-pos)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::xpos (:pointer :double))
-              (%glfw::ypos (:pointer :double)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::xpos (claw-utils:claw-pointer :double))
+              (%glfw::ypos (claw-utils:claw-pointer :double)))
 
 (declaim (inline %glfw::get-error))
 
 (cffi:defcfun ("glfwGetError" %glfw::get-error)
               :int
-              (%glfw::description (:pointer claw-utils:claw-string)))
+              (%glfw::description
+               (claw-utils:claw-pointer claw-utils:claw-string)))
 
 (declaim (inline %glfw::get-framebuffer-size))
 
 (cffi:defcfun ("glfwGetFramebufferSize" %glfw::get-framebuffer-size)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::width (:pointer :int))
-              (%glfw::height (:pointer :int)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::width (claw-utils:claw-pointer :int))
+              (%glfw::height (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-gamepad-name))
 
@@ -821,12 +831,19 @@
 (cffi:defcfun ("glfwGetGamepadState" %glfw::get-gamepad-state)
               :int
               (%glfw::jid :int)
-              (%glfw::state (:pointer %glfw::gamepadstate)))
+              (%glfw::state
+               (claw-utils:claw-pointer %glfw::gamepadstate)))
 
 (cffi:defcstruct (%glfw::gammaramp :size 32)
-                 (%glfw::red (:pointer :unsigned-short) :offset 0)
-                 (%glfw::green (:pointer :unsigned-short) :offset 8)
-                 (%glfw::blue (:pointer :unsigned-short) :offset 16)
+                 (%glfw::red
+                  (claw-utils:claw-pointer :unsigned-short) :offset
+                  0)
+                 (%glfw::green
+                  (claw-utils:claw-pointer :unsigned-short) :offset
+                  8)
+                 (%glfw::blue
+                  (claw-utils:claw-pointer :unsigned-short) :offset
+                  16)
                  (%glfw::size :unsigned-int :offset 24))
 
 (cffi:defctype %glfw::gammaramp (:struct %glfw::gammaramp))
@@ -834,17 +851,18 @@
 (declaim (inline %glfw::get-gamma-ramp))
 
 (cffi:defcfun ("glfwGetGammaRamp" %glfw::get-gamma-ramp)
-              (:pointer %glfw::gammaramp)
-              (%glfw::monitor (:pointer %glfw::monitor)))
+              (claw-utils:claw-pointer %glfw::gammaramp)
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor)))
 
 (declaim (inline %glfw::get-input-mode))
 
 (cffi:defcfun ("glfwGetInputMode" %glfw::get-input-mode)
               :int
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::mode :int))
 
-(cffi:defctype %glfw::vkproc (:pointer :void))
+(cffi:defctype %glfw::vkproc (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::get-instance-proc-address))
 
@@ -857,16 +875,16 @@
 (declaim (inline %glfw::get-joystick-axes))
 
 (cffi:defcfun ("glfwGetJoystickAxes" %glfw::get-joystick-axes)
-              (:pointer :float)
+              (claw-utils:claw-pointer :float)
               (%glfw::jid :int)
-              (%glfw::count (:pointer :int)))
+              (%glfw::count (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-joystick-buttons))
 
 (cffi:defcfun ("glfwGetJoystickButtons" %glfw::get-joystick-buttons)
-              (:pointer :unsigned-char)
+              (claw-utils:claw-pointer :unsigned-char)
               (%glfw::jid :int)
-              (%glfw::count (:pointer :int)))
+              (%glfw::count (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-joystick-guid))
 
@@ -877,9 +895,9 @@
 (declaim (inline %glfw::get-joystick-hats))
 
 (cffi:defcfun ("glfwGetJoystickHats" %glfw::get-joystick-hats)
-              (:pointer :unsigned-char)
+              (claw-utils:claw-pointer :unsigned-char)
               (%glfw::jid :int)
-              (%glfw::count (:pointer :int)))
+              (%glfw::count (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-joystick-name))
 
@@ -891,14 +909,14 @@
 
 (cffi:defcfun ("glfwGetJoystickUserPointer"
                %glfw::get-joystick-user-pointer)
-              (:pointer :void)
+              (claw-utils:claw-pointer :void)
               (%glfw::jid :int))
 
 (declaim (inline %glfw::get-key))
 
 (cffi:defcfun ("glfwGetKey" %glfw::get-key)
               :int
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::key :int))
 
 (declaim (inline %glfw::get-key-name))
@@ -919,67 +937,75 @@
 (cffi:defcfun ("glfwGetMonitorContentScale"
                %glfw::get-monitor-content-scale)
               :void
-              (%glfw::monitor (:pointer %glfw::monitor))
-              (%glfw::xscale (:pointer :float))
-              (%glfw::yscale (:pointer :float)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::xscale (claw-utils:claw-pointer :float))
+              (%glfw::yscale (claw-utils:claw-pointer :float)))
 
 (declaim (inline %glfw::get-monitor-name))
 
 (cffi:defcfun ("glfwGetMonitorName" %glfw::get-monitor-name)
               claw-utils:claw-string
-              (%glfw::monitor (:pointer %glfw::monitor)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor)))
 
 (declaim (inline %glfw::get-monitor-physical-size))
 
 (cffi:defcfun ("glfwGetMonitorPhysicalSize"
                %glfw::get-monitor-physical-size)
               :void
-              (%glfw::monitor (:pointer %glfw::monitor))
-              (%glfw::width-mm (:pointer :int))
-              (%glfw::height-mm (:pointer :int)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::width-mm (claw-utils:claw-pointer :int))
+              (%glfw::height-mm (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-monitor-pos))
 
 (cffi:defcfun ("glfwGetMonitorPos" %glfw::get-monitor-pos)
               :void
-              (%glfw::monitor (:pointer %glfw::monitor))
-              (%glfw::xpos (:pointer :int))
-              (%glfw::ypos (:pointer :int)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::xpos (claw-utils:claw-pointer :int))
+              (%glfw::ypos (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-monitor-user-pointer))
 
 (cffi:defcfun ("glfwGetMonitorUserPointer"
                %glfw::get-monitor-user-pointer)
-              (:pointer :void)
-              (%glfw::monitor (:pointer %glfw::monitor)))
+              (claw-utils:claw-pointer :void)
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor)))
 
 (declaim (inline %glfw::get-monitor-workarea))
 
 (cffi:defcfun ("glfwGetMonitorWorkarea" %glfw::get-monitor-workarea)
               :void
-              (%glfw::monitor (:pointer %glfw::monitor))
-              (%glfw::xpos (:pointer :int))
-              (%glfw::ypos (:pointer :int))
-              (%glfw::width (:pointer :int))
-              (%glfw::height (:pointer :int)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::xpos (claw-utils:claw-pointer :int))
+              (%glfw::ypos (claw-utils:claw-pointer :int))
+              (%glfw::width (claw-utils:claw-pointer :int))
+              (%glfw::height (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-monitors))
 
 (cffi:defcfun ("glfwGetMonitors" %glfw::get-monitors)
-              (:pointer (:pointer %glfw::monitor))
-              (%glfw::count (:pointer :int)))
+              (claw-utils:claw-pointer
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::count (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-mouse-button))
 
 (cffi:defcfun ("glfwGetMouseButton" %glfw::get-mouse-button)
               :int
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::button :int))
 
 (cffi:defcstruct (%glfw.ext::vk-physical-device-t :size 0))
 
 (cffi:defctype %glfw.ext::vk-physical-device
-               (:pointer (:struct %glfw.ext::vk-physical-device-t)))
+               (claw-utils:claw-pointer
+                (:struct %glfw.ext::vk-physical-device-t)))
 
 (cffi:defctype %glfw.ext::uint32-t :unsigned-int)
 
@@ -995,9 +1021,9 @@
 (declaim (inline %glfw::get-primary-monitor))
 
 (cffi:defcfun ("glfwGetPrimaryMonitor" %glfw::get-primary-monitor)
-              (:pointer %glfw::monitor))
+              (claw-utils:claw-pointer %glfw::monitor))
 
-(cffi:defctype %glfw::glproc (:pointer :void))
+(cffi:defctype %glfw::glproc (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::get-proc-address))
 
@@ -1009,8 +1035,9 @@
 
 (cffi:defcfun ("glfwGetRequiredInstanceExtensions"
                %glfw::get-required-instance-extensions)
-              (:pointer claw-utils:claw-string)
-              (%glfw::count (:pointer %glfw.ext::uint32-t)))
+              (claw-utils:claw-pointer claw-utils:claw-string)
+              (%glfw::count
+               (claw-utils:claw-pointer %glfw.ext::uint32-t)))
 
 (declaim (inline %glfw::get-time))
 
@@ -1032,9 +1059,9 @@
 
 (cffi:defcfun ("glfwGetVersion" %glfw::get-version)
               :void
-              (%glfw::major (:pointer :int))
-              (%glfw::minor (:pointer :int))
-              (%glfw::rev (:pointer :int)))
+              (%glfw::major (claw-utils:claw-pointer :int))
+              (%glfw::minor (claw-utils:claw-pointer :int))
+              (%glfw::rev (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-version-string))
 
@@ -1054,21 +1081,23 @@
 (declaim (inline %glfw::get-video-mode))
 
 (cffi:defcfun ("glfwGetVideoMode" %glfw::get-video-mode)
-              (:pointer %glfw::vidmode)
-              (%glfw::monitor (:pointer %glfw::monitor)))
+              (claw-utils:claw-pointer %glfw::vidmode)
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor)))
 
 (declaim (inline %glfw::get-video-modes))
 
 (cffi:defcfun ("glfwGetVideoModes" %glfw::get-video-modes)
-              (:pointer %glfw::vidmode)
-              (%glfw::monitor (:pointer %glfw::monitor))
-              (%glfw::count (:pointer :int)))
+              (claw-utils:claw-pointer %glfw::vidmode)
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::count (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-window-attrib))
 
 (cffi:defcfun ("glfwGetWindowAttrib" %glfw::get-window-attrib)
               :int
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::attrib :int))
 
 (declaim (inline %glfw::get-window-content-scale))
@@ -1076,54 +1105,54 @@
 (cffi:defcfun ("glfwGetWindowContentScale"
                %glfw::get-window-content-scale)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::xscale (:pointer :float))
-              (%glfw::yscale (:pointer :float)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::xscale (claw-utils:claw-pointer :float))
+              (%glfw::yscale (claw-utils:claw-pointer :float)))
 
 (declaim (inline %glfw::get-window-frame-size))
 
 (cffi:defcfun ("glfwGetWindowFrameSize" %glfw::get-window-frame-size)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::left (:pointer :int))
-              (%glfw::top (:pointer :int))
-              (%glfw::right (:pointer :int))
-              (%glfw::bottom (:pointer :int)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::left (claw-utils:claw-pointer :int))
+              (%glfw::top (claw-utils:claw-pointer :int))
+              (%glfw::right (claw-utils:claw-pointer :int))
+              (%glfw::bottom (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-window-monitor))
 
 (cffi:defcfun ("glfwGetWindowMonitor" %glfw::get-window-monitor)
-              (:pointer %glfw::monitor)
-              (%glfw::window (:pointer %glfw::window)))
+              (claw-utils:claw-pointer %glfw::monitor)
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::get-window-opacity))
 
 (cffi:defcfun ("glfwGetWindowOpacity" %glfw::get-window-opacity)
               :float
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::get-window-pos))
 
 (cffi:defcfun ("glfwGetWindowPos" %glfw::get-window-pos)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::xpos (:pointer :int))
-              (%glfw::ypos (:pointer :int)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::xpos (claw-utils:claw-pointer :int))
+              (%glfw::ypos (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-window-size))
 
 (cffi:defcfun ("glfwGetWindowSize" %glfw::get-window-size)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::width (:pointer :int))
-              (%glfw::height (:pointer :int)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::width (claw-utils:claw-pointer :int))
+              (%glfw::height (claw-utils:claw-pointer :int)))
 
 (declaim (inline %glfw::get-window-user-pointer))
 
 (cffi:defcfun ("glfwGetWindowUserPointer"
                %glfw::get-window-user-pointer)
-              (:pointer :void)
-              (%glfw::window (:pointer %glfw::window)))
+              (claw-utils:claw-pointer :void)
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (cffi:defctype %glfw.ext::rr-crtc :unsigned-long)
 
@@ -1131,7 +1160,8 @@
 
 (cffi:defcfun ("glfwGetX11Adapter" %glfw::get-x11adapter)
               %glfw.ext::rr-crtc
-              (%glfw::monitor (:pointer %glfw::monitor)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor)))
 
 (cffi:defcstruct (%glfw.ext::%x-display :size 0))
 
@@ -1140,7 +1170,7 @@
 (declaim (inline %glfw::get-x11display))
 
 (cffi:defcfun ("glfwGetX11Display" %glfw::get-x11display)
-              (:pointer %glfw.ext::display))
+              (claw-utils:claw-pointer %glfw.ext::display))
 
 (cffi:defctype %glfw.ext::rr-output :unsigned-long)
 
@@ -1148,7 +1178,8 @@
 
 (cffi:defcfun ("glfwGetX11Monitor" %glfw::get-x11monitor)
               %glfw.ext::rr-output
-              (%glfw::monitor (:pointer %glfw::monitor)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor)))
 
 (declaim (inline %glfw::get-x11selection-string))
 
@@ -1162,19 +1193,19 @@
 
 (cffi:defcfun ("glfwGetX11Window" %glfw::get-x11window)
               %glfw.ext::window
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::hide-window))
 
 (cffi:defcfun ("glfwHideWindow" %glfw::hide-window)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::iconify-window))
 
 (cffi:defcfun ("glfwIconifyWindow" %glfw::iconify-window)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::init))
 
@@ -1203,13 +1234,13 @@
 
 (cffi:defcfun ("glfwMakeContextCurrent" %glfw::make-context-current)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::maximize-window))
 
 (cffi:defcfun ("glfwMaximizeWindow" %glfw::maximize-window)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::poll-events))
 
@@ -1230,85 +1261,85 @@
 (cffi:defcfun ("glfwRequestWindowAttention"
                %glfw::request-window-attention)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::restore-window))
 
 (cffi:defcfun ("glfwRestoreWindow" %glfw::restore-window)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
-(cffi:defctype %glfw::charfun (:pointer :void))
+(cffi:defctype %glfw::charfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-char-callback))
 
 (cffi:defcfun ("glfwSetCharCallback" %glfw::set-char-callback)
               %glfw::charfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::charfun))
 
-(cffi:defctype %glfw::charmodsfun (:pointer :void))
+(cffi:defctype %glfw::charmodsfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-char-mods-callback))
 
 (cffi:defcfun ("glfwSetCharModsCallback"
                %glfw::set-char-mods-callback)
               %glfw::charmodsfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::charmodsfun))
 
 (declaim (inline %glfw::set-clipboard-string))
 
 (cffi:defcfun ("glfwSetClipboardString" %glfw::set-clipboard-string)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::string claw-utils:claw-string))
 
 (declaim (inline %glfw::set-cursor))
 
 (cffi:defcfun ("glfwSetCursor" %glfw::set-cursor)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::cursor (:pointer %glfw::cursor)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::cursor (claw-utils:claw-pointer %glfw::cursor)))
 
-(cffi:defctype %glfw::cursorenterfun (:pointer :void))
+(cffi:defctype %glfw::cursorenterfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-cursor-enter-callback))
 
 (cffi:defcfun ("glfwSetCursorEnterCallback"
                %glfw::set-cursor-enter-callback)
               %glfw::cursorenterfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::cursorenterfun))
 
 (declaim (inline %glfw::set-cursor-pos))
 
 (cffi:defcfun ("glfwSetCursorPos" %glfw::set-cursor-pos)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::xpos :double)
               (%glfw::ypos :double))
 
-(cffi:defctype %glfw::cursorposfun (:pointer :void))
+(cffi:defctype %glfw::cursorposfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-cursor-pos-callback))
 
 (cffi:defcfun ("glfwSetCursorPosCallback"
                %glfw::set-cursor-pos-callback)
               %glfw::cursorposfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::cursorposfun))
 
-(cffi:defctype %glfw::dropfun (:pointer :void))
+(cffi:defctype %glfw::dropfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-drop-callback))
 
 (cffi:defcfun ("glfwSetDropCallback" %glfw::set-drop-callback)
               %glfw::dropfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::dropfun))
 
-(cffi:defctype %glfw::errorfun (:pointer :void))
+(cffi:defctype %glfw::errorfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-error-callback))
 
@@ -1316,39 +1347,43 @@
               %glfw::errorfun
               (%glfw::callback %glfw::errorfun))
 
-(cffi:defctype %glfw::framebuffersizefun (:pointer :void))
+(cffi:defctype %glfw::framebuffersizefun
+               (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-framebuffer-size-callback))
 
 (cffi:defcfun ("glfwSetFramebufferSizeCallback"
                %glfw::set-framebuffer-size-callback)
               %glfw::framebuffersizefun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::framebuffersizefun))
 
 (declaim (inline %glfw::set-gamma))
 
 (cffi:defcfun ("glfwSetGamma" %glfw::set-gamma)
               :void
-              (%glfw::monitor (:pointer %glfw::monitor))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
               (%glfw::gamma :float))
 
 (declaim (inline %glfw::set-gamma-ramp))
 
 (cffi:defcfun ("glfwSetGammaRamp" %glfw::set-gamma-ramp)
               :void
-              (%glfw::monitor (:pointer %glfw::monitor))
-              (%glfw::ramp (:pointer %glfw::gammaramp)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::ramp
+               (claw-utils:claw-pointer %glfw::gammaramp)))
 
 (declaim (inline %glfw::set-input-mode))
 
 (cffi:defcfun ("glfwSetInputMode" %glfw::set-input-mode)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::mode :int)
               (%glfw::value :int))
 
-(cffi:defctype %glfw::joystickfun (:pointer :void))
+(cffi:defctype %glfw::joystickfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-joystick-callback))
 
@@ -1363,18 +1398,18 @@
                %glfw::set-joystick-user-pointer)
               :void
               (%glfw::jid :int)
-              (%glfw::pointer (:pointer :void)))
+              (%glfw::pointer (claw-utils:claw-pointer :void)))
 
-(cffi:defctype %glfw::keyfun (:pointer :void))
+(cffi:defctype %glfw::keyfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-key-callback))
 
 (cffi:defcfun ("glfwSetKeyCallback" %glfw::set-key-callback)
               %glfw::keyfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::keyfun))
 
-(cffi:defctype %glfw::monitorfun (:pointer :void))
+(cffi:defctype %glfw::monitorfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-monitor-callback))
 
@@ -1387,26 +1422,27 @@
 (cffi:defcfun ("glfwSetMonitorUserPointer"
                %glfw::set-monitor-user-pointer)
               :void
-              (%glfw::monitor (:pointer %glfw::monitor))
-              (%glfw::pointer (:pointer :void)))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::pointer (claw-utils:claw-pointer :void)))
 
-(cffi:defctype %glfw::mousebuttonfun (:pointer :void))
+(cffi:defctype %glfw::mousebuttonfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-mouse-button-callback))
 
 (cffi:defcfun ("glfwSetMouseButtonCallback"
                %glfw::set-mouse-button-callback)
               %glfw::mousebuttonfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::mousebuttonfun))
 
-(cffi:defctype %glfw::scrollfun (:pointer :void))
+(cffi:defctype %glfw::scrollfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-scroll-callback))
 
 (cffi:defcfun ("glfwSetScrollCallback" %glfw::set-scroll-callback)
               %glfw::scrollfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::scrollfun))
 
 (declaim (inline %glfw::set-time))
@@ -1420,7 +1456,7 @@
 (cffi:defcfun ("glfwSetWindowAspectRatio"
                %glfw::set-window-aspect-ratio)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::numer :int)
               (%glfw::denom :int))
 
@@ -1428,74 +1464,78 @@
 
 (cffi:defcfun ("glfwSetWindowAttrib" %glfw::set-window-attrib)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::attrib :int)
               (%glfw::value :int))
 
-(cffi:defctype %glfw::windowclosefun (:pointer :void))
+(cffi:defctype %glfw::windowclosefun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-window-close-callback))
 
 (cffi:defcfun ("glfwSetWindowCloseCallback"
                %glfw::set-window-close-callback)
               %glfw::windowclosefun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::windowclosefun))
 
-(cffi:defctype %glfw::windowcontentscalefun (:pointer :void))
+(cffi:defctype %glfw::windowcontentscalefun
+               (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-window-content-scale-callback))
 
 (cffi:defcfun ("glfwSetWindowContentScaleCallback"
                %glfw::set-window-content-scale-callback)
               %glfw::windowcontentscalefun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::windowcontentscalefun))
 
-(cffi:defctype %glfw::windowfocusfun (:pointer :void))
+(cffi:defctype %glfw::windowfocusfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-window-focus-callback))
 
 (cffi:defcfun ("glfwSetWindowFocusCallback"
                %glfw::set-window-focus-callback)
               %glfw::windowfocusfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::windowfocusfun))
 
 (declaim (inline %glfw::set-window-icon))
 
 (cffi:defcfun ("glfwSetWindowIcon" %glfw::set-window-icon)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::count :int)
-              (%glfw::images (:pointer %glfw::image)))
+              (%glfw::images (claw-utils:claw-pointer %glfw::image)))
 
-(cffi:defctype %glfw::windowiconifyfun (:pointer :void))
+(cffi:defctype %glfw::windowiconifyfun
+               (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-window-iconify-callback))
 
 (cffi:defcfun ("glfwSetWindowIconifyCallback"
                %glfw::set-window-iconify-callback)
               %glfw::windowiconifyfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::windowiconifyfun))
 
-(cffi:defctype %glfw::windowmaximizefun (:pointer :void))
+(cffi:defctype %glfw::windowmaximizefun
+               (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-window-maximize-callback))
 
 (cffi:defcfun ("glfwSetWindowMaximizeCallback"
                %glfw::set-window-maximize-callback)
               %glfw::windowmaximizefun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::windowmaximizefun))
 
 (declaim (inline %glfw::set-window-monitor))
 
 (cffi:defcfun ("glfwSetWindowMonitor" %glfw::set-window-monitor)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::monitor (:pointer %glfw::monitor))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
               (%glfw::xpos :int)
               (%glfw::ypos :int)
               (%glfw::width :int)
@@ -1506,35 +1546,36 @@
 
 (cffi:defcfun ("glfwSetWindowOpacity" %glfw::set-window-opacity)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::opacity :float))
 
 (declaim (inline %glfw::set-window-pos))
 
 (cffi:defcfun ("glfwSetWindowPos" %glfw::set-window-pos)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::xpos :int)
               (%glfw::ypos :int))
 
-(cffi:defctype %glfw::windowposfun (:pointer :void))
+(cffi:defctype %glfw::windowposfun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-window-pos-callback))
 
 (cffi:defcfun ("glfwSetWindowPosCallback"
                %glfw::set-window-pos-callback)
               %glfw::windowposfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::windowposfun))
 
-(cffi:defctype %glfw::windowrefreshfun (:pointer :void))
+(cffi:defctype %glfw::windowrefreshfun
+               (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-window-refresh-callback))
 
 (cffi:defcfun ("glfwSetWindowRefreshCallback"
                %glfw::set-window-refresh-callback)
               %glfw::windowrefreshfun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::windowrefreshfun))
 
 (declaim (inline %glfw::set-window-should-close))
@@ -1542,25 +1583,25 @@
 (cffi:defcfun ("glfwSetWindowShouldClose"
                %glfw::set-window-should-close)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::value :int))
 
 (declaim (inline %glfw::set-window-size))
 
 (cffi:defcfun ("glfwSetWindowSize" %glfw::set-window-size)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::width :int)
               (%glfw::height :int))
 
-(cffi:defctype %glfw::windowsizefun (:pointer :void))
+(cffi:defctype %glfw::windowsizefun (claw-utils:claw-pointer :void))
 
 (declaim (inline %glfw::set-window-size-callback))
 
 (cffi:defcfun ("glfwSetWindowSizeCallback"
                %glfw::set-window-size-callback)
               %glfw::windowsizefun
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::callback %glfw::windowsizefun))
 
 (declaim (inline %glfw::set-window-size-limits))
@@ -1568,7 +1609,7 @@
 (cffi:defcfun ("glfwSetWindowSizeLimits"
                %glfw::set-window-size-limits)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::minwidth :int)
               (%glfw::minheight :int)
               (%glfw::maxwidth :int)
@@ -1578,7 +1619,7 @@
 
 (cffi:defcfun ("glfwSetWindowTitle" %glfw::set-window-title)
               :void
-              (%glfw::window (:pointer %glfw::window))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
               (%glfw::title claw-utils:claw-string))
 
 (declaim (inline %glfw::set-window-user-pointer))
@@ -1586,8 +1627,8 @@
 (cffi:defcfun ("glfwSetWindowUserPointer"
                %glfw::set-window-user-pointer)
               :void
-              (%glfw::window (:pointer %glfw::window))
-              (%glfw::pointer (:pointer :void)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window))
+              (%glfw::pointer (claw-utils:claw-pointer :void)))
 
 (declaim (inline %glfw::set-x11selection-string))
 
@@ -1600,13 +1641,13 @@
 
 (cffi:defcfun ("glfwShowWindow" %glfw::show-window)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::swap-buffers))
 
 (cffi:defcfun ("glfwSwapBuffers" %glfw::swap-buffers)
               :void
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (declaim (inline %glfw::swap-interval))
 
@@ -1657,7 +1698,7 @@
 
 (cffi:defcfun ("glfwWindowShouldClose" %glfw::window-should-close)
               :int
-              (%glfw::window (:pointer %glfw::window)))
+              (%glfw::window (claw-utils:claw-pointer %glfw::window)))
 
 (eval-when (:load-toplevel :compile-toplevel :execute)
   (export '%glfw::+lose-context-on-reset+ :%glfw)
