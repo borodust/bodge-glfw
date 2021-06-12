@@ -5,15 +5,23 @@
   :mailto "dev@borodust.org"
   :license "MIT"
   :pathname "src/"
-  :depends-on (:alexandria :cffi :cffi-c-ref :claw :claw-utils)
+  :depends-on (:alexandria :cffi :cffi-c-ref :bodge-glfw-bindings)
   :serial t
   :components ((:file "packages")
-               (:static-file "bodge_glfw.h")
-               (:file "claw")
-               (:file "glfw")
-               (:module :glfw-includes :pathname "lib/glfw/include/")
-               (:module :glfw-deps :pathname "lib/glfw/deps/")
-               (:module :spec)))
+               (:file "glfw")))
+
+
+(asdf:defsystem :bodge-glfw/wrapper
+  :description "Wrapper over glfw3 library"
+  :version "1.0.0"
+  :author "Pavel Korolev"
+  :mailto "dev@borodust.org"
+  :license "MIT"
+  :depends-on (:alexandria :cffi :cffi-c-ref :claw :claw-utils)
+  :serial t
+  :components ((:file "src/claw")
+               (:module :glfw-includes :pathname "src/lib/glfw/include/")
+               (:module :glfw-deps :pathname "src/lib/glfw/deps/")))
 
 
 (asdf:defsystem :bodge-glfw/example
