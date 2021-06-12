@@ -31,5 +31,5 @@
   :mailto "dev@borodust.org"
   :license "MIT"
   :pathname "src/"
-  :depends-on (:glfw-blob :bodge-glfw :claw :cl-opengl)
+  :depends-on (:glfw-blob :bodge-glfw :cl-opengl)
   :components ((:file "example")))
