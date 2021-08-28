@@ -11,4 +11,4 @@
    (:file "bindings/x86_64-w64-mingw32" :if-feature
     (:and :x86-64 :windows))
    (:file "bindings/x86_64-apple-darwin-gnu" :if-feature
-    (:and :x86-64 :drawin))))
+    (:and :x86-64 :darwin))))
