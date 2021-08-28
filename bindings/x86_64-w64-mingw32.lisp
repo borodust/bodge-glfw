@@ -593,52 +593,6 @@
 
 (defparameter %glfw::+x11-instance-name+ 147458)
 
-(cffi:defcstruct (%glfw::cursor :size 0))
-
-(cffi:defctype %glfw::cursor (:struct %glfw::cursor))
-
-(cffi:defcstruct (%glfw::image :size 16)
-                 (%glfw::width :int :offset 0)
-                 (%glfw::height :int :offset 4)
-                 (%glfw::pixels
-                  (claw-utils:claw-pointer :unsigned-char) :offset 8))
-
-(cffi:defctype %glfw::image (:struct %glfw::image))
-
-(declaim (inline %glfw::create-cursor))
-
-(cffi:defcfun ("glfwCreateCursor" %glfw::create-cursor)
-              (claw-utils:claw-pointer %glfw::cursor)
-              (%glfw::image (claw-utils:claw-pointer %glfw::image))
-              (%glfw::xhot :int)
-              (%glfw::yhot :int))
-
-(declaim (inline %glfw::create-standard-cursor))
-
-(cffi:defcfun ("glfwCreateStandardCursor"
-               %glfw::create-standard-cursor)
-              (claw-utils:claw-pointer %glfw::cursor)
-              (%glfw::shape :int))
-
-(cffi:defcstruct (%glfw::monitor :size 0))
-
-(cffi:defctype %glfw::monitor (:struct %glfw::monitor))
-
-(cffi:defcstruct (%glfw::window :size 0))
-
-(cffi:defctype %glfw::window (:struct %glfw::window))
-
-(declaim (inline %glfw::create-window))
-
-(cffi:defcfun ("glfwCreateWindow" %glfw::create-window)
-              (claw-utils:claw-pointer %glfw::window)
-              (%glfw::width :int)
-              (%glfw::height :int)
-              (%glfw::title claw-utils:claw-string)
-              (%glfw::monitor
-               (claw-utils:claw-pointer %glfw::monitor))
-              (%glfw::share (claw-utils:claw-pointer %glfw::window)))
-
 (cffi:defcenum (%glfw.ext::vk-result :int)
                "/usr/include/vulkan/vulkan_core.h:139:14"
                (:success 0)
@@ -690,6 +644,52 @@
                (:error-pipeline-compile-required-ext 1000297000)
                (:result-max-enum 2147483647))
 
+(cffi:defcstruct (%glfw::cursor :size 0))
+
+(cffi:defctype %glfw::cursor (:struct %glfw::cursor))
+
+(cffi:defcstruct (%glfw::image :size 16)
+                 (%glfw::width :int :offset 0)
+                 (%glfw::height :int :offset 4)
+                 (%glfw::pixels
+                  (claw-utils:claw-pointer :unsigned-char) :offset 8))
+
+(cffi:defctype %glfw::image (:struct %glfw::image))
+
+(declaim (inline %glfw::create-cursor))
+
+(cffi:defcfun ("glfwCreateCursor" %glfw::create-cursor)
+              (claw-utils:claw-pointer %glfw::cursor)
+              (%glfw::image (claw-utils:claw-pointer %glfw::image))
+              (%glfw::xhot :int)
+              (%glfw::yhot :int))
+
+(declaim (inline %glfw::create-standard-cursor))
+
+(cffi:defcfun ("glfwCreateStandardCursor"
+               %glfw::create-standard-cursor)
+              (claw-utils:claw-pointer %glfw::cursor)
+              (%glfw::shape :int))
+
+(cffi:defcstruct (%glfw::monitor :size 0))
+
+(cffi:defctype %glfw::monitor (:struct %glfw::monitor))
+
+(cffi:defcstruct (%glfw::window :size 0))
+
+(cffi:defctype %glfw::window (:struct %glfw::window))
+
+(declaim (inline %glfw::create-window))
+
+(cffi:defcfun ("glfwCreateWindow" %glfw::create-window)
+              (claw-utils:claw-pointer %glfw::window)
+              (%glfw::width :int)
+              (%glfw::height :int)
+              (%glfw::title claw-utils:claw-string)
+              (%glfw::monitor
+               (claw-utils:claw-pointer %glfw::monitor))
+              (%glfw::share (claw-utils:claw-pointer %glfw::window)))
+
 (cffi:defctype %glfw.ext::vk-result %glfw.ext::vk-result)
 
 (cffi:defcstruct (%glfw.ext::vk-instance-t :size 0))
@@ -698,36 +698,7 @@
                (claw-utils:claw-pointer
                 (:struct %glfw.ext::vk-instance-t)))
 
-(cffi:defctype %glfw.ext::pfn-vk-allocation-function
-               (claw-utils:claw-pointer :void))
-
-(cffi:defctype %glfw.ext::pfn-vk-reallocation-function
-               (claw-utils:claw-pointer :void))
-
-(cffi:defctype %glfw.ext::pfn-vk-free-function
-               (claw-utils:claw-pointer :void))
-
-(cffi:defctype %glfw.ext::pfn-vk-internal-allocation-notification
-               (claw-utils:claw-pointer :void))
-
-(cffi:defctype %glfw.ext::pfn-vk-internal-free-notification
-               (claw-utils:claw-pointer :void))
-
-(cffi:defcstruct (%glfw.ext::vk-allocation-callbacks :size 48)
-                 (%glfw::p-user-data (claw-utils:claw-pointer :void)
-                  :offset 0)
-                 (%glfw::pfn-allocation
-                  %glfw.ext::pfn-vk-allocation-function :offset 8)
-                 (%glfw::pfn-reallocation
-                  %glfw.ext::pfn-vk-reallocation-function :offset 16)
-                 (%glfw::pfn-free %glfw.ext::pfn-vk-free-function
-                  :offset 24)
-                 (%glfw::pfn-internal-allocation
-                  %glfw.ext::pfn-vk-internal-allocation-notification
-                  :offset 32)
-                 (%glfw::pfn-internal-free
-                  %glfw.ext::pfn-vk-internal-free-notification
-                  :offset 40))
+(cffi:defcstruct (%glfw.ext::vk-allocation-callbacks :size 48))
 
 (cffi:defctype %glfw.ext::vk-allocation-callbacks
                (:struct %glfw.ext::vk-allocation-callbacks))
@@ -1687,7 +1658,6 @@
   (export '%glfw::set-window-attrib :%glfw)
   (export '%glfw::window-should-close :%glfw)
   (export '%glfw::+focus-on-show+ :%glfw)
-  (export '%glfw::pfn-internal-allocation :%glfw)
   (export '%glfw::+key-left-shift+ :%glfw)
   (export '%glfw::+green-bits+ :%glfw)
   (export '%glfw::+sticky-mouse-buttons+ :%glfw)
@@ -1706,11 +1676,10 @@
   (export '%glfw::+mouse-button-2+ :%glfw)
   (export '%glfw::+format-unavailable+ :%glfw)
   (export '%glfw::+key-kp-8+ :%glfw)
-  (export '%glfw.ext::pfn-vk-free-function :%glfw.ext)
+  (export '%glfw::cursorenterfun :%glfw)
   (export '%glfw::+joystick-3+ :%glfw)
   (export '%glfw::post-empty-event :%glfw)
   (export '%glfw::+key-home+ :%glfw)
-  (export '%glfw::cursorenterfun :%glfw)
   (export '%glfw::+x11-class-name+ :%glfw)
   (export '%glfw::+key-s+ :%glfw)
   (export '%glfw::+mod-shift+ :%glfw)
@@ -1745,7 +1714,7 @@
   (export '%glfw::gammaramp :%glfw)
   (export '%glfw::errorfun :%glfw)
   (export '%glfw::+key-tab+ :%glfw)
-  (export '%glfw::set-window-monitor :%glfw)
+  (export '%glfw::+gamepad-button-triangle+ :%glfw)
   (export '%glfw::+scale-to-monitor+ :%glfw)
   (export '%glfw::get-key-name :%glfw)
   (export '%glfw::charfun :%glfw)
@@ -1772,10 +1741,10 @@
   (export '%glfw::+key-f10+ :%glfw)
   (export '%glfw::+key-d+ :%glfw)
   (export '%glfw::size :%glfw)
+  (export '%glfw::set-window-monitor :%glfw)
   (export '%glfw::glproc :%glfw)
   (export '%glfw::+accum-red-bits+ :%glfw)
   (export '%glfw::+context-release-behavior+ :%glfw)
-  (export '%glfw::+gamepad-button-triangle+ :%glfw)
   (export '%glfw::+key-f15+ :%glfw)
   (export '%glfw::+context-version-minor+ :%glfw)
   (export '%glfw::get-monitor-name :%glfw)
@@ -1787,13 +1756,11 @@
   (export '%glfw::get-gamma-ramp :%glfw)
   (export '%glfw::update-gamepad-mappings :%glfw)
   (export '%glfw::blue-bits :%glfw)
-  (export '%glfw.ext::pfn-vk-allocation-function :%glfw.ext)
   (export '%glfw::request-window-attention :%glfw)
   (export '%glfw::set-window-aspect-ratio :%glfw)
   (export '%glfw::+opengl-compat-profile+ :%glfw)
   (export '%glfw::+hat-down+ :%glfw)
   (export '%glfw::+context-revision+ :%glfw)
-  (export '%glfw::pfn-internal-free :%glfw)
   (export '%glfw.ext::uint64-t :%glfw.ext)
   (export '%glfw.ext::vk-surface-khr :%glfw.ext)
   (export '%glfw::+joystick-10+ :%glfw)
@@ -1809,26 +1776,24 @@
   (export '%glfw.ext::vk-physical-device :%glfw.ext)
   (export '%glfw::+key-world-1+ :%glfw)
   (export '%glfw::+key-print-screen+ :%glfw)
-  (export '%glfw::set-window-content-scale-callback :%glfw)
+  (export '%glfw::set-window-title :%glfw)
   (export '%glfw::+egl-context-api+ :%glfw)
   (export '%glfw::+joystick-15+ :%glfw)
   (export '%glfw::+key-m+ :%glfw)
   (export '%glfw::+hat-right-up+ :%glfw)
-  (export '%glfw::+key-right-bracket+ :%glfw)
+  (export '%glfw::axes :%glfw)
   (export '%glfw::+key-enter+ :%glfw)
   (export '%glfw::+samples+ :%glfw)
-  (export '%glfw::+gamepad-button-dpad-left+ :%glfw)
+  (export '%glfw::set-window-content-scale-callback :%glfw)
   (export '%glfw::+mouse-button-3+ :%glfw)
   (export '%glfw::+key-f13+ :%glfw)
   (export '%glfw::+key-5+ :%glfw)
+  (export '%glfw::+gamepad-button-dpad-left+ :%glfw)
   (export '%glfw::+api-unavailable+ :%glfw)
-  (export '%glfw::axes :%glfw)
-  (export '%glfw::p-user-data :%glfw)
   (export '%glfw::+key-f24+ :%glfw)
   (export '%glfw::+key-comma+ :%glfw)
   (export '%glfw::+key-left-bracket+ :%glfw)
-  (export '%glfw::+key-f23+ :%glfw)
-  (export '%glfw::set-window-title :%glfw)
+  (export '%glfw::windowrefreshfun :%glfw)
   (export '%glfw::set-window-size :%glfw)
   (export '%glfw::+key-f14+ :%glfw)
   (export '%glfw::+key-f6+ :%glfw)
@@ -1836,15 +1801,14 @@
   (export '%glfw::set-monitor-user-pointer :%glfw)
   (export '%glfw::+key-kp-5+ :%glfw)
   (export '%glfw::+gamepad-button-cross+ :%glfw)
-  (export '%glfw::windowrefreshfun :%glfw)
   (export '%glfw::scrollfun :%glfw)
   (export '%glfw::+key-f5+ :%glfw)
-  (export '%glfw::+mouse-button-5+ :%glfw)
+  (export '%glfw::+key-f23+ :%glfw)
   (export '%glfw::windowfocusfun :%glfw)
   (export '%glfw::+key-r+ :%glfw)
-  (export '%glfw.ext::pfn-vk-internal-free-notification :%glfw.ext)
+  (export '%glfw::+key-right-bracket+ :%glfw)
   (export '%glfw::+joystick-2+ :%glfw)
-  (export '%glfw.ext::pfn-vk-reallocation-function :%glfw.ext)
+  (export '%glfw::framebuffersizefun :%glfw)
   (export '%glfw::get-monitor-user-pointer :%glfw)
   (export '%glfw::+key-2+ :%glfw)
   (export '%glfw::+mod-alt+ :%glfw)
@@ -1857,7 +1821,6 @@
   (export '%glfw::set-window-refresh-callback :%glfw)
   (export '%glfw::+gamepad-button-dpad-down+ :%glfw)
   (export '%glfw::swap-interval :%glfw)
-  (export '%glfw::framebuffersizefun :%glfw)
   (export '%glfw::+decorated+ :%glfw)
   (export '%glfw::mousebuttonfun :%glfw)
   (export '%glfw::get-mouse-button :%glfw)
@@ -1871,6 +1834,7 @@
   (export '%glfw::+key-g+ :%glfw)
   (export '%glfw::+key-scroll-lock+ :%glfw)
   (export '%glfw::get-joystick-hats :%glfw)
+  (export '%glfw::+mouse-button-5+ :%glfw)
   (export '%glfw::+key-l+ :%glfw)
   (export '%glfw::+key-f3+ :%glfw)
   (export '%glfw::+key-7+ :%glfw)
@@ -1940,14 +1904,11 @@
   (export '%glfw::+key-8+ :%glfw)
   (export '%glfw::+key-kp-decimal+ :%glfw)
   (export '%glfw::set-window-size-callback :%glfw)
-  (export '%glfw.ext::pfn-vk-internal-allocation-notification
-          :%glfw.ext)
   (export '%glfw::+key-kp-1+ :%glfw)
-  (export '%glfw::pfn-free :%glfw)
+  (export '%glfw::+key-down+ :%glfw)
   (export '%glfw::+joystick-5+ :%glfw)
   (export '%glfw::+context-no-error+ :%glfw)
   (export '%glfw::+arrow-cursor+ :%glfw)
-  (export '%glfw::+key-down+ :%glfw)
   (export '%glfw::+hat-centered+ :%glfw)
   (export '%glfw::set-window-maximize-callback :%glfw)
   (export '%glfw::poll-events :%glfw)
@@ -1981,8 +1942,7 @@
   (export '%glfw::set-cursor-enter-callback :%glfw)
   (export '%glfw::+crosshair-cursor+ :%glfw)
   (export '%glfw::get-monitors :%glfw)
-  (export '%glfw::charmodsfun :%glfw)
-  (export '%glfw::pfn-reallocation :%glfw)
+  (export '%glfw::focus-window :%glfw)
   (export '%glfw::+key-3+ :%glfw)
   (export '%glfw::get-gamepad-state :%glfw)
   (export '%glfw::+key-f4+ :%glfw)
@@ -1993,7 +1953,6 @@
   (export '%glfw::set-error-callback :%glfw)
   (export '%glfw.ext::uint32-t :%glfw.ext)
   (export '%glfw::windowcontentscalefun :%glfw)
-  (export '%glfw::focus-window :%glfw)
   (export '%glfw::+cursor-disabled+ :%glfw)
   (export '%glfw::+key-f7+ :%glfw)
   (export '%glfw::+opengl-es-api+ :%glfw)
@@ -2012,6 +1971,7 @@
   (export '%glfw::+hat-right-down+ :%glfw)
   (export '%glfw::set-cursor :%glfw)
   (export '%glfw::+stencil-bits+ :%glfw)
+  (export '%glfw::charmodsfun :%glfw)
   (export '%glfw::+not-initialized+ :%glfw)
   (export '%glfw::+joystick-12+ :%glfw)
   (export '%glfw::+key-left-super+ :%glfw)
@@ -2031,7 +1991,6 @@
   (export '%glfw::vidmode :%glfw)
   (export '%glfw::+hresize-cursor+ :%glfw)
   (export '%glfw::+accum-alpha-bits+ :%glfw)
-  (export '%glfw::pfn-allocation :%glfw)
   (export '%glfw::+key-right-control+ :%glfw)
   (export '%glfw::+key-last+ :%glfw)
   (export '%glfw::+key-kp-enter+ :%glfw)
@@ -2039,11 +1998,12 @@
   (export '%glfw::+no-current-context+ :%glfw)
   (export '%glfw::cursorposfun :%glfw)
   (export '%glfw::+cocoa-chdir-resources+ :%glfw)
-  (export '%glfw::+key-f16+ :%glfw)
+  (export '%glfw::windowposfun :%glfw)
   (export '%glfw::+key-i+ :%glfw)
   (export '%glfw::joystick-is-gamepad :%glfw)
   (export '%glfw::+key-caps-lock+ :%glfw)
   (export '%glfw::+gamepad-button-a+ :%glfw)
+  (export '%glfw::+key-f16+ :%glfw)
   (export '%glfw::+gamepad-button-dpad-up+ :%glfw)
   (export '%glfw::+no-error+ :%glfw)
   (export '%glfw::+key-period+ :%glfw)
@@ -2061,12 +2021,11 @@
   (export '%glfw::get-time :%glfw)
   (export '%glfw::+blue-bits+ :%glfw)
   (export '%glfw::+key-grave-accent+ :%glfw)
-  (export '%glfw::+version-major+ :%glfw)
+  (export '%glfw::set-window-should-close :%glfw)
   (export '%glfw::+joystick-9+ :%glfw)
   (export '%glfw::get-video-mode :%glfw)
   (export '%glfw::+key-world-2+ :%glfw)
   (export '%glfw::+key-z+ :%glfw)
-  (export '%glfw::windowposfun :%glfw)
   (export '%glfw::get-clipboard-string :%glfw)
   (export '%glfw::+vresize-cursor+ :%glfw)
   (export '%glfw::+key-j+ :%glfw)
@@ -2081,16 +2040,16 @@
   (export '%glfw::+key-delete+ :%glfw)
   (export '%glfw::+false+ :%glfw)
   (export '%glfw::windowiconifyfun :%glfw)
-  (export '%glfw::+client-api+ :%glfw)
+  (export '%glfw::windowsizefun :%glfw)
   (export '%glfw::+key-f2+ :%glfw)
-  (export '%glfw::set-window-should-close :%glfw)
+  (export '%glfw::+version-major+ :%glfw)
   (export '%glfw::set-window-close-callback :%glfw)
   (export '%glfw::cursor :%glfw)
   (export '%glfw::+key-f22+ :%glfw)
   (export '%glfw::+mod-caps-lock+ :%glfw)
   (export '%glfw::+key-equal+ :%glfw)
   (export '%glfw::+gamepad-button-last+ :%glfw)
-  (export '%glfw::windowsizefun :%glfw)
+  (export '%glfw::+client-api+ :%glfw)
   (export '%glfw::height :%glfw)
   (export '%glfw::get-current-context :%glfw)
   (export '%glfw::set-joystick-user-pointer :%glfw)

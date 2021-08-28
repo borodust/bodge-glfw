@@ -7,7 +7,7 @@
                                         "GLFW_CALLBACK_DEFINED")
                   (:targets ((:and :x86-64 :linux) "x86_64-pc-linux-gnu")
                             ((:and :x86-64 :windows) "x86_64-w64-mingw32")
-                            ((:and :x86-64 :drawin) "x86_64-apple-darwin-gnu"))
+                            ((:and :x86-64 :darwin) "x86_64-apple-darwin-gnu"))
                   (:persistent :bodge-glfw-bindings
                    :depends-on (:claw-utils)))
   :in-package :%glfw
