@@ -8,7 +8,7 @@ handling library.
 # Requirements
 
 * ASDF/Quicklisp
-* x86_64/i686 GNU/Linux, macOS or Windows
+* x86_64/i686/ppc64/ppc64le GNU/Linux, macOS or Windows
 
 # Loading
 ```lisp
