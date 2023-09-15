@@ -51,6 +51,12 @@
      ,@body))
 
 
+(defmacro define-window-focus-callback (name (window iconified) &body body)
+  `(cffi:defcallback ,name :void ((,window (:pointer %glfw:window))
+                                  (,iconified :int))
+     ,@body))
+
+
 (defmacro define-char-callback (name (window codepoint) &body body)
   `(cffi:defcallback ,name :void ((,window (:pointer %glfw:window))
                                   (,codepoint :unsigned-int))
